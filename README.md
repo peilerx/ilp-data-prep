@@ -1,6 +1,6 @@
 # Handled Data Preparation vs Native Data Preparation (for CPU)
 
-## Final Results of sum for [f32] (40,000,000 elements)
+## Final Results of sum for [f32] (40M elements)
 
 | Method | Execution Time | Throughput | Strategy |
 | :--- | :--- | :--- | :--- |
