@@ -6,6 +6,31 @@ A study on Instruction Level Parallelism (ILP) and Memory Wall constraints.
 Testing the summation of **40,000,000** `f32` elements (~160 MB). 
 This dataset size is ~53x larger than the CPU's L3 cache (3 MB), forcing the system to rely entirely on DRAM performance and the Hardware Prefetcher.
 
+## Why 4 Accumulators?
+
+The benchmark shows a jump from **3.3 GB/s** to **12.7 GB/s**. This is the result of saturating the CPU pipeline.
+
+### 1. Hiding Latency (The "4-Cycle" Rule)
+On Intel Skylake, a floating-point addition (`vaddss`) has a **latency of 4 cycles**.
+* **Native (1 Acc):** The CPU starts 1 addition and *waits* 4 cycles for the result. Efficiency: **25%**.
+* **VLIW-style (4 Accs):** We start 4 independent additions. While `acc3` is starting, `acc0` is finishing. Efficiency: **100%**.
+
+
+
+### 2. Saturating the Bus
+Data arrives from RAM in **64-byte Cache Lines** (16 floats).
+* **Native:** Reads 1 float (4 bytes), processes it, then waits. The memory bus stands idle.
+* **VLIW-style:** By processing 4 independent streams, the CPU "gulps" the entire cache line simultaneously, matching the memory bus's maximum throughput.
+
+
+
+### Efficiency Comparison
+| Metric | Native (`.sum()`) | VLIW-style (4 Accs) |
+| :--- | :--- | :--- |
+| **Data Flow** | Sequential (Stalled) | Parallel (Saturated) |
+| **ALU Usage** | 1 Port (Idling) | 4 Ports (Busy) |
+| **Bus Load** | ~25% of Peak | **~99% of Peak (12.7 GB/s)** |
+
 ## Hardware Specifications
 - **CPU**: Intel Core i5-7200U (Skylake-U) @ 2.50GHz
 - **L3 Cache**: 3 MB
