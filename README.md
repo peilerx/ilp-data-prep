@@ -192,10 +192,18 @@ Data arrives from RAM in **64-byte Cache Lines** (16 floats).
 * **VLIW-style:** By processing 4 independent streams, the CPU "gulps" the entire cache line simultaneously, matching the memory bus's maximum throughput.
 
 
-
 ### Efficiency Comparison
 | Metric | Native (`.sum()`) | VLIW-style (4 Accs) |
 | :--- | :--- | :--- |
 | **Data Flow** | Sequential (Stalled) | Parallel (Saturated) |
 | **ALU Usage** | 1 Port (Idling) | 4 Ports (Busy) |
 | **Bus Load** | ~25% of Peak | **~99% of Peak (12.7 GB/s)** |
+
+### Data Preparation: "Prepping" the Pipeline
+
+High performance in this experiment isn't just about "fast code"—it's about **data preparation**. We surgically restructured how data enters the CPU to match its physical architecture:
+
+1. **Splitting the Stream:** We "prepped" the single `f32` array into 4 independent execution streams. This breaks the **Sequential Dependency Chain**, which normally forces the CPU to sit idle while waiting for the previous addition to complete.
+2. **Geometric Alignment:** By using `chunks_exact(4)`, we ensure that the data layout matches the CPU's internal throughput capacity. This allows the processor to "gulp" a full cache line and process it without a single pipeline stall.
+
+**The Bottom Line:** Data preparation is about moving from *passive data consumption* to *active hardware orchestration*. We prepared the data exactly where it meets the logic—at the pipeline's entrance—making it "digestible" for parallel execution at the instruction level.
