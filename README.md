@@ -5,8 +5,8 @@
 | Method | Execution Time | Throughput | Strategy |
 | :--- | :--- | :--- | :--- |
 | **Native (`.sum()`)** | 47.36 ms | ~3.37 GB/s | Sequential Dependency (1 ALU) |
-| **Prepped (Manual)** | 12.55 ms | **~12.74 GB/s** | 4 Independent Accumulators |
-| **Prepped (Idiomatic)**| 12.90 ms | **~12.40 GB/s** | `chunks_exact` + Array Fold |
+| **Prepped** | 12.55 ms | **~12.74 GB/s** | 4 Independent Accumulators |
+
 
 ---
 
