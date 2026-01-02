@@ -59,18 +59,16 @@ fn criterion_benchmark(c: &mut Criterion) {
     group_sum.bench_function("prepped sum", |b| b.iter(|| prepped_sum(black_box(&data))));
     group_sum.finish();
 
-    let size_div = 10_000_000;
-    let data_div = vec![100.0f32; size_div];
+    let size = 10_000_000;
+    let data = vec![100.0f32; size];
     let divisor = black_box(7.0f32);
 
     let mut group_div = c.benchmark_group("Division elements of [f32]");
 
-    group_div.bench_function("divide", |b| {
-        b.iter(|| divide(black_box(&data_div), divisor))
-    });
+    group_div.bench_function("divide", |b| b.iter(|| divide(black_box(&data), divisor)));
 
     group_div.bench_function("prepped divide", |b| {
-        b.iter(|| prepped_divide(black_box(&data_div), divisor))
+        b.iter(|| prepped_divide(black_box(&data), divisor))
     });
 
     group_div.finish();
