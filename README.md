@@ -13,8 +13,6 @@ In this benchmark, we verify Instruction-Level Parallelism (ILP) by unrolling th
 | **Native (`.sum()`)** | 47.36 ms | ~3.37 GB/s | Sequential Dependency (1 ALU) |
 | **Prepped** | 12.55 ms | **~12.74 GB/s** | 4 Independent Accumulators |
 
----
-
 ## Hardware Specs & Run
 - **CPU**: Intel Core i5-7200U (Skylake) @ 2.50GHz
 - **RAM**: 8GB DDR4-2400 (Single Channel)
