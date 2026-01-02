@@ -2,7 +2,7 @@
 
 **A Deep Dive into Instruction-Level Parallelism (ILP), Memory Walls, and Mechanical Sympathy.**
 
-This project demonstrates how "prepping" data for the CPU—a — can break the 10 GB/s barrier on a single core by optimizing for the physical reality of the silicon.
+This project demonstrates how "prepping" data for the CPU can break the 10 GB/s barrier on a single core by optimizing for the physical reality of the silicon.
 
 ## Final Results (40,000,000 elements)
 
