@@ -12,6 +12,7 @@
 
 ## Hardware Specs & Run
 - **CPU**: Intel Core i5-7200U (Skylake) @ 2.50GHz
+- **RAM**: 8GB DDR4-2400 (Single Channel)
 - **Dataset**: 160 MB (40M `f32` elements)
 
 ```bash
