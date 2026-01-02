@@ -21,49 +21,7 @@ RUSTFLAGS="-C opt-level=3 -C target-cpu=native" cargo bench
 ## ASM Code
 
 ```asm
-native_sum:
-        test    rsi, rsi
-        je      .LBB0_1
-        mov     eax, esi
-        and     eax, 7
-        cmp     rsi, 8
-        jae     .LBB0_4
-        vxorps  xmm0, xmm0, xmm0
-        xor     ecx, ecx
-        jmp     .LBB0_6
-.LBB0_1:
-        vxorps  xmm0, xmm0, xmm0
-        ret
-.LBB0_4:
-        and     rsi, -8
-        vxorps  xmm0, xmm0, xmm0
-        xor     ecx, ecx
-.LBB0_5:
-        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx]
-        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 4]
-        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 8]
-        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 12]
-        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 16]
-        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 20]
-        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 24]
-        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 28]
-        add     rcx, 8
-        cmp     rsi, rcx
-        jne     .LBB0_5
-.LBB0_6:
-        test    rax, rax
-        je      .LBB0_9
-        lea     rcx, [rdi + 4*rcx]
-        xor     edx, edx
-.LBB0_8:
-        vaddss  xmm0, xmm0, dword ptr [rcx + 4*rdx]
-        inc     rdx
-        cmp     rax, rdx
-        jne     .LBB0_8
-.LBB0_9:
-        ret
-
-vliw_style_sum:
+prepped_sum:
         mov     rax, rsi
         and     rax, -4
         je      .LBB1_1
@@ -158,5 +116,55 @@ vliw_style_sum:
         add     rcx, 32
         cmp     rcx, rax
         jne     .LBB1_17
+.LBB1_18:
+        ret
+
+.LCPI2_0:
+        .long   0x80000000
+sum:
+        test    rsi, rsi
+        je      .LBB2_1
+        mov     eax, esi
+        and     eax, 7
+        cmp     rsi, 8
+        jae     .LBB2_4
+        vmovss  xmm0, dword ptr [rip + .LCPI2_0]
+        xor     ecx, ecx
+        jmp     .LBB2_6
+.LBB2_1:
+        vmovss  xmm0, dword ptr [rip + .LCPI2_0]
+        ret
+.LBB2_4:
+        and     rsi, -8
+        vmovss  xmm0, dword ptr [rip + .LCPI2_0]
+        xor     ecx, ecx
+.LBB2_5:
+        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx]
+        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 4]
+        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 8]
+        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 12]
+        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 16]
+        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 20]
+        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 24]
+        vaddss  xmm0, xmm0, dword ptr [rdi + 4*rcx + 28]
+        add     rcx, 8
+        cmp     rsi, rcx
+        jne     .LBB2_5
+.LBB2_6:
+        test    rax, rax
+        je      .LBB2_9
+        lea     rcx, [rdi + 4*rcx]
+        xor     edx, edx
+.LBB2_8:
+        vaddss  xmm0, xmm0, dword ptr [rcx + 4*rdx]
+        inc     rdx
+        cmp     rax, rdx
+        jne     .LBB2_8
+.LBB2_9:
+        ret
+
+
+   
+       
 .LBB1_18:
         ret
