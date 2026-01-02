@@ -1,6 +1,6 @@
 # Data Preparation for CPU Experiment (Rust)
 
-## Final Results (40,000,000 element)
+## Final Results of sum for [f32] (40,000,000 element)
 
 | Method | Execution Time | Throughput | Strategy |
 | :--- | :--- | :--- | :--- |
