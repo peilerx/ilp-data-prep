@@ -24,6 +24,20 @@ pub fn vliw_style_sum(data: &[f32]) -> f32 {
     sum
 }
 
+pub fn idiomatic_vliw_sum(data: &[f32]) -> f32 {
+    data.chunks_exact(4)
+    .fold([0.0; 4], |mut acc, chunk| {
+        acc[0] += chunk[0];
+        acc[1] += chunk[1];
+        acc[2] += chunk[2];
+        acc[3] += chunk[3];
+        acc
+    })
+    .iter()
+    .sum::<f32>()
+    + data.chunks_exact(4).remainder().iter().sum::<f32>()
+}
+
 fn criterion_benchmark(c: &mut Criterion) {
     let size = 40_000_000;
     let data = vec![1.1f32; size];
@@ -34,6 +48,10 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     group.bench_function("VLIW-style", |b| {
         b.iter(|| vliw_style_sum(black_box(&data)))
+    });
+
+    group.bench_function("VLIW-style (Idiomatic)", |b| {
+        b.iter(|| idiomatic_vliw_sum(black_box(&data)))
     });
 
     group.finish();
