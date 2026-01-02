@@ -1,4 +1,4 @@
-# ILP Data Preparation Experiment (Rust)
+# Data Preparation for CPU Experiment (Rust)
 
 ## Final Results (40,000,000 element)
 
