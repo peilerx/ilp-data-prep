@@ -1,7 +1,7 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 pub fn native_sum(data: &[f32]) -> f32 {
-    data.iter().fold(0.0, |acc, &x| acc + x)
+    data.iter().sum()
 }
 
 pub fn vliw_style_sum(data: &[f32]) -> f32 {
