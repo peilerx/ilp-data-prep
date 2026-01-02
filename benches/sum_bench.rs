@@ -25,7 +25,7 @@ pub fn vliw_style_sum(data: &[f32]) -> f32 {
 }
 
 fn criterion_benchmark(c: &mut Criterion) {
-    let size = 100_000_00;
+    let size = 40_000_000;
     let data = vec![1.1f32; size];
 
     let mut group = c.benchmark_group("Summing");
