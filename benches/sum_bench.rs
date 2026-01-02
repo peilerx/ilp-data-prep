@@ -4,7 +4,7 @@ pub fn native_sum(data: &[f32]) -> f32 {
     data.iter().sum()
 }
 
-pub fn vliw_style_sum(data: &[f32]) -> f32 {
+pub fn native_ilp_sum(data: &[f32]) -> f32 {
     let mut acc0 = 0.0;
     let mut acc1 = 0.0;
     let mut acc2 = 0.0;
@@ -24,18 +24,18 @@ pub fn vliw_style_sum(data: &[f32]) -> f32 {
     sum
 }
 
-pub fn idiomatic_vliw_sum(data: &[f32]) -> f32 {
+pub fn idiomatic_ilp_sum(data: &[f32]) -> f32 {
     data.chunks_exact(4)
-    .fold([0.0; 4], |mut acc, chunk| {
-        acc[0] += chunk[0];
-        acc[1] += chunk[1];
-        acc[2] += chunk[2];
-        acc[3] += chunk[3];
-        acc
-    })
-    .iter()
-    .sum::<f32>()
-    + data.chunks_exact(4).remainder().iter().sum::<f32>()
+        .fold([0.0; 4], |mut acc, chunk| {
+            acc[0] += chunk[0];
+            acc[1] += chunk[1];
+            acc[2] += chunk[2];
+            acc[3] += chunk[3];
+            acc
+        })
+        .iter()
+        .sum::<f32>()
+        + data.chunks_exact(4).remainder().iter().sum::<f32>()
 }
 
 fn criterion_benchmark(c: &mut Criterion) {
@@ -44,14 +44,14 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     let mut group = c.benchmark_group("Summing");
 
-    group.bench_function("Native", |b| b.iter(|| native_sum(black_box(&data))));
+    group.bench_function("native", |b| b.iter(|| native_sum(black_box(&data))));
 
-    group.bench_function("VLIW-style", |b| {
-        b.iter(|| vliw_style_sum(black_box(&data)))
+    group.bench_function("native-ilp-style", |b| {
+        b.iter(|| native_ilp_sum(black_box(&data)))
     });
 
-    group.bench_function("VLIW-style (Idiomatic)", |b| {
-        b.iter(|| idiomatic_vliw_sum(black_box(&data)))
+    group.bench_function("idiomatic-ilp-style", |b| {
+        b.iter(|| idiomatic_ilp_sum(black_box(&data)))
     });
 
     group.finish();
