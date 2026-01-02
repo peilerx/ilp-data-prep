@@ -1,4 +1,4 @@
-# Data Preparation for CPU
+# Data Preparation for CPU vs Native 
 
 ## Final Results of sum for [f32] (40,000,000 elements)
 
