@@ -2,7 +2,10 @@
 
 In this benchmark, we verify Instruction-Level Parallelism (ILP) by unrolling the summation of a floating-point array into multiple independent accumulators. By breaking the data into separate chunks, we provide the processor's scheduler with independent instructions. The hardware scheduler recognizes that these operations have no data dependencies. It decomposes these instructions into a stream of micro-operations (uOps) and dispatches them to multiple execution ports simultaneously. This allows the CPU to sustain a throughput of multiple instructions per clock cycle (superscalar execution), effectively bypassing the bottleneck of the "one-instruction-per-cycle" serial execution model.
 
+---
+
 # **CPU Pipeline Flow (Instruction Level)**:
+
 **RAM/Cache** → **Fetch** (seq.) → **Decoders** (paral.) → **Dispatch/Rename** (seq.) → **Reservation Station** (paral. IF independent uOps OR seq. IF data-dependent) → **Ports** (paral.) → **Retire** (seq.)
 
 # Final Results of sum for [f32] (40M elements)
@@ -11,9 +14,6 @@ In this benchmark, we verify Instruction-Level Parallelism (ILP) by unrolling th
 | :--- | :--- | :--- | :--- |
 | **Native (`.sum()`)** | 47.36 ms | ~3.37 GB/s | Sequential Dependency (1 ALU) |
 | **Prepped** | 12.55 ms | **~12.74 GB/s** | 4 Independent Accumulators |
-
-
----
 
 ## Hardware Specs & Run
 - **CPU**: Intel Core i5-7200U (Skylake) @ 2.50GHz
